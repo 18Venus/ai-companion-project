@@ -4,6 +4,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/toaster";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -22,6 +23,7 @@ export default function RootLayout({
       <body className={cn("bg-secondary",inter.className)}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
         {children}
+        <Toaster/>
         </ThemeProvider>
         
         </body>

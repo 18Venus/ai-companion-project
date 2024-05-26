@@ -13,6 +13,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Wand2 } from "lucide-react";
+import { useToast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 interface CompanionFormProps {
     initialData: Companion | null;
@@ -26,8 +28,8 @@ const formSchema = z.object({
     description: z.string().min(1, {
         message: "Description is required.",
     }),
-    instructions: z.string().min(200, {
-        message: "Instructions require at least 200 characters.",
+    instruction: z.string().min(200, {
+        message: "instruction require at least 200 characters.",
     }),
     seed: z.string().min(200, {
         message: "Seed require at least 200 characters.",
@@ -35,7 +37,7 @@ const formSchema = z.object({
     src: z.string().min(1, {
         message: "Image is required.",
     }),
-    categoryID: z.string().min(1, {
+    categoryId: z.string().min(1, {
         message: "Category is required.",
     }),
 })
@@ -44,15 +46,18 @@ const CompanionForm = ({
     categories,
     initialData
 }: CompanionFormProps) => {
+    const router= useRouter();
+    const {toast}= useToast();
+
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: initialData || {
             name: "",
             description: "",
-            instructions: "",
+            instruction: "",
             seed: "",
             src: "",
-            categoryID: undefined,
+            categoryId: undefined,
         },
     });
 
@@ -67,8 +72,18 @@ const CompanionForm = ({
                 //create companion
                 await axios.post("/api/companion",values);
             }
+            toast({
+               description:"Success."
+                
+            });
+
+            router.refresh();
+            router.push("/");
         } catch(error){
-            console.log(error, 'SOMETHING WENT WRONG')
+            toast({
+                variant: "destructive",
+                description: "Something went wrong",
+            });
         }
     }
 
@@ -147,7 +162,7 @@ const CompanionForm = ({
                         />
 
                         <FormField
-                            name="categoryID"
+                            name="categoryId"
                             control={form.control}
                             render={({ field }) => (
                                 <FormItem className="col-span-2 md:col-span-1 ">
@@ -192,18 +207,18 @@ const CompanionForm = ({
                                 Configuration
                             </h3>
                             <p className="text-sm text-muted-foreground">
-                                Detailed instructions for AI Behaviour
+                                Detailed instruction for AI Behaviour
                             </p>
                         </div>
                         <Separator className="bg-primary/10" />
 
                     </div>
                     <FormField
-                        name="instructions"
+                        name="instruction"
                         control={form.control}
                         render={({ field }) => (
                             <FormItem className="col-span-2 md:col-span-1 ">
-                                <FormLabel>Detailed Instructions</FormLabel>
+                                <FormLabel>Detailed instruction</FormLabel>
                                 <FormControl>
                                     <Textarea
                                         className="bg-background resize-none"
