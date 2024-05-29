@@ -17,8 +17,10 @@
         "name": "next"
       }
     ],
+    "baseUrl": "./", // Add this line to set the base URL
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@langchain/*": ["node_modules/@langchain/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
