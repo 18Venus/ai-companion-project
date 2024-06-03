@@ -62,7 +62,6 @@ model Message{
   @@index([companionId])
 }
 
-
 model UserSubscription{
   id                   String @id @default(uuid())
   userId                 String @unique
